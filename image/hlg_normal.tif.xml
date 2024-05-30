@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="zh"><Esri><CreaDate>20240311</CreaDate><CreaTime>21262800</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="f:\software\arcgispro\Resources\ArcToolbox\toolboxes\Spatial Analyst Tools.tbx\RasterCalculator" Date="20240311" Time="212628">RasterCalculator " ("海螺沟DEM_Clip"-1187)*255/(7473-1187)" D:\project\html\mapbox\flaskProject\image\hlg_normal.tif</Process></lineage></DataProperties></Esri></metadata>

@@ -1,0 +1,125 @@
+{% extends "recognition.html" %}
+
+{% block style_mode %}
+
+{% endblock %}
+
+{% block main_content %}
+<div class="row m-lg-2">
+  <div class="col-md-4">
+    <div class="card" style="width: 100%;">
+        <div class="panel" style="overflow:auto; max-height:200px">
+            <img src="static/喜马拉雅山.jpg" class=""  style="width: 400px" alt="..." id="near-infrared">
+        </div>
+      <div class="card-body">
+        <h5 class="card-title">近红外通道</h5>
+        <p class="card-text">请选择一幅近红外通道影像</p>
+        <div class="form-group" id="formGroup1">
+          <input class="form-control form-control-sm mt-1 mb-3" type="file" id="imageInput1">
+          <a href="#" class="btn btn-light" id="upload1">确认</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <!-- 重复上述card结构 -->
+    <div class="card" style="width: 100%;">
+        <div class="panel" style="overflow:auto; max-height:200px">
+            <img src="static/帕奎埃.jpg" class="" style="width: 400px" alt="..." id="DEMImage">
+        </div>
+
+      <div class="card-body">
+        <h5 class="card-title">DEM</h5>
+        <p class="card-text">请选择一幅DEM影像</p>
+        <input class="form-control form-control-sm mt-1 mb-3" type="file" id="imageInput2">
+        <a href="#" class="btn btn-light" id="upload2">确认</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <!-- 重复上述card结构 -->
+    <div class="card" style="width: 100%;">
+        <div class="panel" style="overflow:auto; max-height:200px">
+            <img src="static/新西兰库克山.jpg" class="" style="width: 400px" alt="..." id="slopeImage">
+        </div>
+      <div class="card-body">
+        <h5 class="card-title">坡度</h5>
+        <p class="card-text">请选择一幅坡度影像</p>
+        <div class="form-group" id="formGroup1">
+          <input class="form-control form-control-sm mt-1 mb-3" type="file" id="imageInput3">
+          <a href="#" class="btn btn-light" id="upload3">确认</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row m-lg-2">
+  <div class="card m-lg-1 mr-4">
+    <div class="row m-lg-1 mr-1">
+      <div class="col-md-4 col-xs-12 ">
+        <div class="col-xs-8 card-body">
+            <div class="panel mt-0" style="overflow:auto; max-height:400px;max-width:400px">
+              <img src="static/山景城,瑞士.jpg" class="img-thumbnail"  id="111">
+            </div>
+        </div>
+          <div class="row mt-3">
+            <div class="d-grid gap-2 d-md-block ">
+                <button class="btn btn-light mt-2 mb-2 me-2 m-left-4" id="startButton">开始运行</button>
+                <button class="btn btn-light mt-2 mb-2 " id="pop-up" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal">地图显示</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">将结果图像显示在地图上</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body"> {# 弹窗内容 #}
+                        <form>
+                          <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">图像坐标：</label>
+                            <input type="text" class="form-control" id="inputLoction" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">如果不输入坐标则使用默认坐标</div>
+
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-outline-primary" id="mapButton">确认</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+      </div>
+      <div class=" col-xs-12 col-md-6">
+        <div class="row justify-content-start">
+            <div class="col-6">
+                <div class="card mt-3">
+                  <div class="card-header" id="resulttext">
+                    分析结果：
+                  </div>
+                  <div class="panel" style="overflow:auto; max-height:360px;max-width:400px">
+                    <div class="card-text" id="cardText">
+
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row-cols-2 mt-2" id="result_table_Rgb">
+                  <div class="echart" id="chart1" style="width: 520px;height:400px;">
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,424 @@
+{% extends 'header.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block mystyle %}
+<style>
+  .carousel,
+  .carousel-inner,
+  .carousel-item {
+    height: 100%;
+    border: none; /* 移除边框 */
+    /* Set the height to fill the container */
+  }
+
+  .carousel-item img {
+    width: 100%;
+    /* Ensure images fill the carousel item */
+    height: auto;
+    /* Maintain aspect ratio */
+    border: none;
+    /* Remove any border */
+  }
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 5%;
+    /* Adjust the width of the control buttons */
+    background-color: rgba(0, 0, 0, 0);
+    /* Optional: add background color to the control buttons */
+  }
+
+  /* Optional: If you want to hide the carousel controls on smaller screens */
+  @media (max-width: 767px) {
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      display: none;
+    }
+  }
+  body,
+  h2,
+  div {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .background-image {
+    position: relative;
+    height: calc(100vh - 61px);
+    /* 根据实际页头高度调整 */
+    z-index: -1;
+  }
+
+  .text-center {
+    margin-top: 15vh;
+    text-align: center;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2vw;
+  }
+
+  .block {
+    position: relative;
+    width: 20vw;
+    height: 28vh;
+    background-color: lightblue;
+    margin-right: 2vw;
+    margin-left: 2vw;
+    margin-top: 8vh;
+  }
+
+  .block img {
+    display: block;
+    height: 60%;
+    margin: 10% auto 0;
+  }
+
+  .block h2 {
+    position: absolute;
+    width: 100%;
+    margin-top: 10%;
+    text-align: center;
+    font-size: 1.6em;
+  }
+
+  .yellow-strip {
+    position: absolute;
+    width: 100%;
+    height: 35vh;
+    background-color: #f1f8f8;
+    display: flex;
+    justify-content: space-between;
+    padding: 2vw;
+    flex-direction: row;
+  }
+
+  .yellow-strip .left-content {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .yellow-strip .left-content img {
+    max-height: 95%;
+    /* 根据需要调整图片高度 */
+  }
+
+  .yellow-strip .right-content {
+    width: 50%;
+    padding: 20px;
+  }
+
+  .yellow-strip h2 {
+    margin-bottom: 10px;
+  }
+
+  .yellow-strip .right-content button {
+    padding: 5px 10px;
+    margin-top: 10px;
+  }
+
+  .yellow-strip p {
+    margin-top: 30px;
+    font-size: 1em;
+  }
+
+  .white-strip {
+    position: absolute;
+    width: 100%;
+    height: 35vh;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 2vw;
+    flex-direction: row-reverse;
+  }
+
+  .white-strip .left-content {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .white-strip .left-content img {
+    max-height: 95%;
+    /* 根据需要调整图片高度 */
+  }
+
+  .white-strip .right-content {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* 右对齐标题和按钮 */
+  }
+
+  .white-strip h2 {
+    margin-bottom: 10px;
+    margin-left: auto;
+  }
+
+  .white-strip .right-content button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    margin-left: auto;
+  }
+
+  .white-strip p {
+    margin-top: 30px;
+    font-size: 1em;
+  }
+
+  .white-strip .carousel-item {
+    width: 100%;
+    height: 29vh;
+    /* 根据需要调整高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .white-strip .carousel-item img {
+    max-height: 95%;
+    object-fit: contain;
+    /* 保持图片比例 */
+  }
+
+  .white-strip .carousel-control-prev,
+  .white-strip .carousel-control-next {
+    width: 40px;
+    /* 调整控制按钮大小 */
+    height: 40px;
+    /* 调整控制按钮大小 */
+    background-size: contain;
+    /* 保持图片比例 */
+    background-repeat: no-repeat;
+    /* 不重复图片 */
+    background-position: center center;
+    /* 图片居中显示 */
+  }
+
+  .white-strip .carousel-control-prev {
+    background-image: url('{{ url_for("static", filename="left.png") }}');
+    margin-left: 22%;
+    padding-top: 38%;
+  }
+
+  .white-strip .carousel-control-next {
+    background-image: url('{{ url_for("static", filename="right.png") }}');
+    margin-right: 23%;
+    padding-top: 38%;
+  }
+
+  .white-strip .carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-bottom: -1%;
+  }
+
+  .white-strip .carousel-indicators li {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #d4f8f8;
+    cursor: pointer;
+  }
+
+  .white-strip .carousel-indicators .active {
+    background-color: #333;
+  }
+  .block {
+            background-color: rgba(255, 255, 255, 0.5); /* 磨砂效果 */
+            border-radius: 15px; /* 圆角 */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid  text-white" style="width:100%; height: calc(100vh - 58px);">
+  <div id="demo" class="carousel slide" data-bs-ride="carousel" style="width: 100%;">
+    <!-- 指示符 -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- 轮播图片 -->
+    <div class="carousel-inner justify-content-center align-items-center ">
+      <div class="carousel-item active justify-content-center align-items-center">
+        <img src="{{ url_for('static', filename='雪山天空.jpg') }}" class="img-fluid d-block w-100"
+          style="width:500px; height:100%" alt="Responsive width">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>多模态地貌识别</h5>
+          <p>基于多模态遥感数据的地貌识别算法</p>
+        </div>
+      </div>
+
+      <div class="carousel-item justify-content-center align-items-center">
+        <img src="{{ url_for('static', filename="上海的城市网络.jpg") }}" class="img-fluid d-block w-100"
+          style="width:500px; height:100%" alt="Responsive width">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>国土规划辅助</h5>
+          <p>集合大模型技术的国土空间规划辅助</p>
+        </div>
+      </div>
+
+      <div class="carousel-item justify-content-center align-items-center">
+        <img src="{{ url_for('static', filename='电信.jpg') }}" class="img-fluid d-block w-100"
+          style="width:500px; height:100%" alt="Responsive width">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>深度学习土地利用识别</h5>
+          <p>基于深度学习技术的土地利用分类</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 左右切换按钮 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>
+
+<div class="text-center">
+  <h1>主 要 功 能</h1>
+</div>
+<div class="container">
+  <div class="block">
+    <img src="/static/tb1.png" alt="图片1">
+    <h2>地图功能</h2>
+  </div>
+  <div class="block">
+    <img src="/static/tb2.png" alt="图片2">
+    <h2>图像预处理</h2>
+  </div>
+  <div class="block">
+    <img src="/static/tb3.png" alt="图片3">
+    <h2>智能对话</h2>
+  </div>
+  <div class="block">
+    <img src="/static/tb4.png" alt="图片4">
+    <h2>智能地貌识别</h2>
+  </div>
+</div>
+
+<div class="yellow-strip" style="top: 175vh;">
+  <div class="left-content">
+    <img src="/static/gn1.png" alt="Feature Image">
+  </div>
+  <div class="right-content">
+    <h2>地 图 功 能</h2>
+    <a type="button" class="btn btn-outline-info" href="/map">体  验</a>
+    <p>基于OpenLayers实现了地图的加载和显示，图层切换和数据图层的加载功能，用于数据的展示和管理。</p>
+  </div>
+</div>
+
+<div class="white-strip" style="top: 210vh;">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <!-- 指示符 -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+    </div>
+
+    <!-- 轮播图片 -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/static/gn2_1.png" alt="Feature Image">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/gn2_2.png" alt="Feature Image">
+      </div>
+    </div>
+
+    <!-- 左右切换按钮 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="right-content">
+    <h2>图 像 预 处 理</h2>
+    <a href="/map" type="button" class="btn btn-outline-info" >体  验</a>
+    <p>基于GDAL库的二次开发和自行编写的地形数据处理算法，实现了自定义的栅格图像处理流的功能，为后续的图像识别奠定基础。基于ChatGLM大模型实现的智能识别和解析自然语言描述的地理处理操作，然后进行自动处理，最终输出结果。
+    </p>
+  </div>
+</div>
+
+<div class="yellow-strip" style="top: 245vh;">
+  <div class="left-content">
+    <img src="/static/gn3.png" alt="Feature Image">
+  </div>
+  <div class="right-content">
+    <h2>智 能 问 答</h2>
+    <a  href="/chat" type="button" class="btn btn-outline-info">体  验</a>
+    <p>基于Qwen-Max大模型实现的智能对话功能和地理问题解答。</p>
+  </div>
+</div>
+
+<div class="white-strip" style="top: 280vh;">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <!-- 指示符 -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+    </div>
+
+    <!-- 轮播图片 -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/static/gn4_1.png" alt="Feature Image">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/gn4_2.png" alt="Feature Image">
+      </div>
+    </div>
+
+    <!-- 左右切换按钮 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="right-content">
+    <h2>智 能 地 貌 识 别</h2>
+    <a type="button" class="btn btn-outline-info" href="/recognition">体  验</a>
+    <p>使用Attention-Unet神经网络实现的基于多模态数据的特定地貌的智能识别。使用添加了空洞卷积的U-Net网络实现的基于卫星遥感影像的土地利用类型的识别和统计。</p>
+  </div>
+</div>
+
+{% endblock %}

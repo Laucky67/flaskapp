@@ -1,0 +1,366 @@
+{% extends "header.html" %}
+{% block title %}地图+功能主体{% endblock %}
+{% block mystyle %}
+<!-- 引入 EasyUI 的 CSS 文件 -->
+<!--<link rel="stylesheet" href="/static/lib/jquery-easyui-1.8.6/themes/default/easyui.css">
+    <link rel="stylesheet" href="/static/lib/jquery-easyui-1.8.6/themes/icon.css">-->
+{# 引入openlayer #}
+<link rel="stylesheet" href="/static/lib/openlayers-9.0/ol.css">
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/openlayers/8.1.0/dist/ol.js"></script>-->
+<script src="/static/lib/openlayers-9.0/dist/ol.js"></script>
+<!-- 引入jQuery和Bootstrap JavaScript库 -->
+{#
+<script src="/static/lib/jquery-371/jquery.min.js"></script>
+#}
+<!--<script src="/static/lib/jquery-easyui-1.8.6/jquery.easyui.min.js"></script>
+    -->
+{#<script src="/static/lib/bs5treeview/src/css/bstreeview.css"></script>#}
+<link rel="stylesheet" href="/static/lib/vakata-jstree-8c1bcc8/dist/themes/default/style.min.css">
+<script src="/static/lib/jquery-371/jquery.js"></script>
+<!-- 引入LayerSwitcher CSS -->
+{#<link rel="stylesheet" href="/static/lib/ol-ext-master/dist/ol-ext.min.css">#}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol-ext@4.0.17/dist/ol-ext.min.css">
+<style>
+  .map {
+    height: calc(100vh - 61px);
+    width: 100%;
+  }
+
+  #offcanvasRight {
+    width: 1000px;
+  }
+  #offcanvasRight1 {
+      width:1000px;
+  }
+
+    /* 加载状态下的按钮样式 */
+    .loading .spinner-border {
+      display: inline-block;
+    }
+
+    .loading .btn {
+      visibility: hidden;
+    }
+    .layer-switcher-outside {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 5px;
+        z-index: 1000;
+        overflow-y: auto;
+        height: 200px;
+        width: 150px;
+    }
+</style>
+{% endblock %} mystyle %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 bg-white sidebar"> <!-- 侧边栏 -->
+            <form id="uploadForm" enctype="multipart/form-data">
+              <div class="form-group row mt-3 mb-3 mx-3">
+                <div class="col-sm-13">
+                  <div class="input-group">
+                    <input id='location' class="form-control" onclick="$('#i-file').click();">
+                    <label class="input-group-btn">
+                      <input type="button" id="i-check" value="浏览文件" class="btn btn-outline-primary"
+                        onclick="$('#i-file').click();">
+                    </label>
+                  </div>
+                </div>
+                <input type="file" name="file" id='i-file' accept=".tif"
+                  onchange="$('#location').val($('#i-file').val());" style="display: none">
+                <button type="button" class="btn btn-light row mt-3  mx-3 col-sm-10" value="Upload"
+                  onclick="uploadFile()">
+                  提交文件
+                </button>
+                <button type="button" class="btn btn-light row mt-3 mb-3 mx-3 col-sm-10"
+                  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                  处理选项
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                  aria-labelledby="offcanvasRightLabel">
+                  <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">图像处理</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="offcanvas-body">
+                    {# 弹窗内容 #}
+                    <div class="container px-4">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="row mt-3">
+                            <div class="p-3 border bg-light">
+                              <h6 class="card-subtitle mb-2 text-muted">处理流程：</h6>
+                              <div class="row" id="processList">
+                                <div class="container mt-1" id="processStream">
+                                    <div class="badge"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mt-3">
+                            <div class="card">
+                              <h6 class="card-subtitle mb-2 mt-2 text-muted d-flex justify-content-between">图像预处理：</h6>
+                              <p>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#高通滤波" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  高通滤波
+                                </a>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#低通滤波" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  低通滤波
+                                </a>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#中值滤波" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  中值滤波
+                                </a>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#线性拉伸" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  线性拉伸
+                                </a>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#对数变换" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  对数变换
+                                </a>
+                                <a class="btn btn-primary mb-1" data-bs-toggle="collapse" href="#幂律变换" role="button"
+                                  aria-expanded="false" aria-controls="collapseExample">
+                                  幂律变换
+                                </a>
+                              </p>
+                              <div class="collapse" id="高通滤波">
+                                <div class="card card-body mb-2">
+                                  <label for="customRange1" class="form-label">选择高通滤波kernel大小(1-13):</label>
+                                  <span id="rangeValue_high">8</span>
+                                  <input type="range" class="form-range" min="3" max="13" step="2" id="high_k">
+                                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-outline-primary btn-lg mt = 2 mr-4" id="提交高通"
+                                      onclick="addBadge('高通滤波',document.getElementById('rangeValue_high').textContent)">确认</button>
+                                  </div>
+
+                                </div>
+                              </div>
+                              <div class="collapse" id="低通滤波">
+                                <div class="card card-body mb-2">
+                                  <label for="customRange1" class="form-label">选择低通滤波kernel大小(1-13)</label>
+                                  <span id="rangeValue_low">8</span>
+                                  <input type="range" class="form-range" min="3" max="13" step="2" id="low_k">
+                                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-outline-primary btn-lg mt = 2 mr-4" id="提交低通"
+                                      onclick="addBadge('低通滤波',document.getElementById('rangeValue_low').textContent)">确认</button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="collapse" id="中值滤波">
+                                <div class="card card-body mb-2">
+                                  <label for="customRange1" class="form-label">选择中值滤波核大小(1-13)</label>
+                                  <span id="rangeValue_mid">8</span>
+                                  <input type="range" class="form-range" min="3" max="13" step="2" id="mid_k">
+                                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn btn-outline-primary btn-lg mt = 2 mr-4" id="提交中值"
+                                      onclick="addBadge('中值滤波',document.getElementById('rangeValue_mid').textContent)">确认</button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="collapse" id="线性拉伸">
+                                <div class="card card-body mb-2">
+                                  <button type="button" class="btn btn-outline-primary btn-lg mt = 2 mr-4" id="提交线性"
+                                    onclick="addBadge('线性拉伸',0)">确认选择线性变换</button>
+                                </div>
+                              </div>
+                              <div class="collapse" id="对数变换">
+                                <div class="card card-body mb-2">
+                                  <label for="customRange1" class="form-label">选择对数变换尺度因子C(0-10)</label>
+                                  <span id="rangeValue_log">5.0</span>
+                                  <input type="range" class="form-range" min="0.1" max="10" step="0.1" id="log_k">
+                                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn  btn-light  btn-lg mt = 2 mr-4" id="提交对数"
+                                      onclick="addBadge('对数变换',
+                                                                document.getElementById('rangeValue_log').textContent)">确认</button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="collapse" id="幂律变换">
+                                <div class="card card-body mb-2">
+                                  <label for="customRange1" class="form-label">选择幂律变换参数gamma(0-10)</label>
+                                  <span id="rangeValue_gamma">0.5</span>
+                                  <input type="range" class="form-range" min="0.1" max="10" step="0.1" id="gamma_k">
+                                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn  btn-light  btn-lg mt = 2 mr-4" id="提交幂律"
+                                      onclick="addBadge('幂律变换',document.getElementById('rangeValue_gamma').textContent)">确认</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mt-3">
+                            <div class="card ">
+                              <h6 class="card-subtitle mb-2 mt-2 text-muted">地理参数提取：</h6>
+                              <p>
+                                <a class="btn btn-primary mb-1" id="curvature" role="button" aria-expanded="false"
+                                  onclick="addBadge('坡度')">
+                                  坡  度
+                                </a>
+                                <a class="btn btn-primary mb-1" id="slope" data-bs-toggle="collapse" role="button"
+                                  aria-expanded="false" onclick="addBadge('曲率')">
+                                  曲  率
+                                </a>
+                                <a class="btn btn-primary mb-1" id="aspect" role="button" aria-expanded="false"
+                                  onclick="addBadge('坡向')">
+                                  坡  向
+                                </a>
+                                <a class="btn btn-primary mb-1" id="fullsink" role="button" aria-expanded="false"
+                                  onclick="addBadge('填洼')">
+                                  填  洼
+                                </a>
+                                <a class="btn btn-primary mb-1" id="d8" role="button" aria-expanded="false"
+                                  onclick="addBadge('流向')">
+                                  流  向
+                                </a>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-info mt-2 mx-1" id="startImageProcess"
+                              style="width: 100%">运行</button>
+                            <button type="button" class="btn btn-outline-info mt-2 mx-1" id="save_preProcess_image"
+                              style="width: 100%">下载</button>
+                            <button type="button" class="btn btn-outline-info mt-2 mx-1" id="display_preProcess_image"
+                              style="width: 100%">显示</button>
+                            <button type="button" class="btn btn-outline-info mt-2 mx-1" id="clear_image"
+                              style="width: 100%">清除</button>
+                          </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row gy-5">
+                                <div class="col-sm">
+                                    <figure class="text-center">
+                                        <figcaption class="blockquote-footer">
+                                            原始图片
+                                        </figcaption>
+                                        <img src= {{ imageUrl }} class="img-thumbnail" id="rawImage" alt="原始图片">
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="row gy-5">
+                                <div class="col-sm">
+                                    <figure class="text-center">
+                                        <figcaption class="blockquote-footer mt-2">
+                                            结果图片
+                                        </figcaption>
+                                        <img src="/static/新西兰库克山.jpg" class="img-thumbnail" id="resultImage" alt="结果图片">
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+            <button class="btn btn-light  row  mb-3 mx-3 col-sm-10" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight1" aria-controls="offcanvasRight">智能图像处理</button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight1" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">智能图像处理</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                        <div class="row">
+                            <!-- 左侧列 -->
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px"></textarea>
+                                    <label for="floatingTextarea2">输入处理需求</label>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col">
+                                        <!-- 在同一行上放置按钮和加载图标 -->
+                                        <div class="d-inline-block" style="width:calc(100% - 40px); display:inline-block;">
+                                            <button class="btn btn-primary mt-2" type="button" id="textSubmit">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <div class="card-body">
+                                            <table id="myTable" class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>操作名称</th>
+                                                        <th>参数</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- 表格数据将通过 JavaScript 动态插入 -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 右侧列 -->
+                            <div class="col-md-8">
+                                <div class="row gy-5">
+                                    <div class="col-sm">
+                                        <figure class="text-center">
+                                            <figcaption class="blockquote-footer">
+                                                原始图片
+                                            </figcaption>
+                                            <img src={{ imageUrl }} class="img-thumbnail" id="rawImage2" alt="原始图片">
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="row gy-5">
+                                    <div class="col-sm">
+                                        <figure class="text-center">
+                                            <figcaption class="blockquote-footer mt-2">
+                                                结果图片
+                                            </figcaption>
+                                            <img src="/static/新西兰库克山.jpg" class="img-thumbnail" id="resultImage2" alt="结果图片">
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+    </div>
+    <div class="col-md-10"> <!-- 地图容器 -->
+      <div id="map" class="map"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 引入OpenLayers JavaScript库 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/openlayers/8.1.0/dist/ol.js"></script>
+<!-- 引入jQuery和Bootstrap JavaScript库-->
+<script src="/static/lib/jquery-371/jquery.js"></script>
+<!--一引入bootstrap-inputfile 库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.2/js/fileinput.min.js"
+  integrity="sha512-XxRivO6jA7xU9a0ozATMIFQFdNySyRrB8uE1QctFmjTTGSGUj9tC7CpnVf7xq1e/QeVhbY9ZLbxEzPFIWpW+xA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.5.2/css/fileinput-rtl.min.css"
+  integrity="sha512-cW5eHYgf3UouIiLHYAXDLI/FFo4Mgk0S271cW6LabPtejrWYR//RTjgte7YW7Ir11EFG8H7SQgAlEWYEF3OeVA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+{# 引入bstreeview 插件#}
+<script src="/static/lib/bs5treeview/src/js/bstreeview.js"></script>
+<!-- 引入pooper.js库 -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="/static/lib/vakata-jstree-8c1bcc8/dist/jstree.min.js"></script>
+<!-- 引入 LayerSwitcher JavaScript -->
+{#<script src="/static/lib/ol-ext-master/dist/ol-ext.min.js"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/ol-ext@4.0.17/dist/ol-ext.min.js"></script>
+<script src="/static/js/map.js"></script>
+{#<script src="https://cdn.jsdelivr.net/npm/ol-layerswitcher/dist/ol-layerswitcher.min.js"></script>#}
+
+{% endblock %}
+
+{#
+
+
+
+#}

@@ -1,0 +1,98 @@
+{% extends 'header.html' %}
+{% block mystyle %}
+<style>
+  body,
+  html {
+    height: 100%;
+    margin: 0;
+  }
+
+  #chatContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #chatHistory {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* 可以根据需要添加 padding 或 margin */
+  }
+
+  #inputContainer {
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    /* 固定底部 */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .chat-container {
+    height: 500px;
+    overflow-y: auto;
+  }
+
+  .chat-container .chat-message {
+    margin-bottom: 10px;
+  }
+
+  .chat-container .ai-avatar,
+  .chat-container .human-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .chat-container .ai-avatar {
+    background-image: url('static/地球.png');
+    /* 替换为AI的头像图片路径 */
+    background-size: cover;
+  }
+
+  .chat-container .human-avatar {
+    background-image: url('static/用户.png');
+    /* 替换为人类的头像图片路径 */
+    background-size: cover;
+  }
+</style>
+{% endblock %}
+{% block title %}首页{% endblock %}
+{% block content %}
+<div class="container">
+  <section id="chatContainer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <ul class="list-unstyled" id="chatHistory">
+            <!-- 对话内容将在这里动态生成 -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="inputContainer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="bg-white">
+              <div class="form-outline">
+                <textarea class="form-control" id="textInput" rows="4"></textarea>
+                <label class="form-label" for="textInput">Message</label>
+              </div>
+            </div>
+            <button type="button" class="btn btn-info btn-rounded float-end" id="sendButton">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 引入Bootstrap JS 和 Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="/static/js/chat.js"></script>
+{% endblock %}

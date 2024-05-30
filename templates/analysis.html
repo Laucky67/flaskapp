@@ -1,0 +1,150 @@
+{% extends "recognition.html" %}
+{% block style_mode %}
+
+{% endblock %}
+{% block main_content %}
+<div class="container">
+    <div class="row ">
+        <!-- 第一列 -->
+        <div class="col-md-4 mt-2">
+            <!-- 第一个 card -->
+            <div class="card mb-4">
+                <img src="/static/新西兰库克山.jpg" class="card-img-top " style="height:270px;width:100%" alt="..."
+                    id="imageTerrainRecognition">
+                <div class="card-body text-center">
+                    <p class="card-text">地形识别图像</p>
+                </div>
+                <div class="form-group mx-3 mb-2" id="formGroup1">
+                    <input class="form-control form-control-sm mt-1 mb-2" type="file" id="imageInputMultimode">
+                    <a href="#" class="btn btn-light" id="upload5">提交图像</a>
+                </div>
+            </div>
+            <!-- 第二个 card -->
+            <div class="card">
+                <img src="/static/喜马拉雅山.jpg" class="card-img-top" style="height:270px;width:100%" id="imageClassify">
+                <div class="card-body text-center">
+                    <p class="card-text">土地利用识别图像</p>
+                </div>
+                <div class="form-group mx-3 mb-2" id="formGroup1">
+                    <input class="form-control form-control-sm mt-1 mb-2" type="file" id="imageInputClassify">
+                    <a href="#" class="btn btn-light" id="upload6">提交图像</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二列 -->
+        <div class="col-md-4 mt-2">
+            <!-- 第一个 card -->
+            <div class="row-cols-1">
+                <div class="card mb-4">
+                    <img src="/static/喜马拉雅山.jpg" class="card-img-top" id="resultimage">
+                    <div class="card-body text-center">
+                        <p class="card-text">土地利用识别图像</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二个 card -->
+            <div class="row-cols-1">
+                <div class="card">
+                    <div class="card-body" style="height:540px">
+                        <button class="btn btn-light" id="startAnalysis"> 开始计算 </button>
+                        <button class="btn btn-light mt-2 mb-2" id="pop-up" data-bs-toggle="modal" data-bs-target="#exampleModal" >地图显示</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">将结果图像显示在地图上</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">  {# 弹窗内容 #}
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">图像坐标：</label>
+                                                <input type="text" class="form-control" id="LocatinoInput1" aria-describedby="emailHelp">
+                                                <div id="emailHelp" class="form-text">如果不输入坐标则使用默认坐标</div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+                                      <button type="button" class="btn btn-outline-primary" id="mapButton">确认</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      <div class="panel" style="overflow:auto; max-height:360px;max-width:450px">
+                        <div class="card-text" id="cardText">
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三列 -->
+        <div class="col-md-4 mt-2">
+            <!-- 第一个 card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div id="chart2" style="width: 385px;height:382px;"></div>
+                </div>
+            </div>
+            <!-- 第二个 card -->
+            <div class="card mt-2">
+                <div class="card-body">
+                    <div id="chart1" style="width: 385px;height:382px;"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+{% endblock %}
+{% block import_script %}
+<script src="/static/js/analysis.js"></script>
+{% endblock %}
+
+{#
+<!-- 左侧列，占据6格 -->
+<div class="col-md-4 mt-2">
+    <div class="card mb-3">
+
+    </div>
+    <div class="card">
+
+    </div>
+    <button class="btn btn-light mt-2 mb-2 text-center" id="startAnalysis"> 开始运行 </button>
+</div>
+<!-- 右侧列，占据6格 -->
+<div class="col-md-4 mt-2">
+    <div class="card">
+
+    </div>
+    <div class="card mt-2">
+
+    </div>
+</div>
+<div class="col-md-4">
+    <!-- 第一个 card -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Card 3-1</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
+        </div>
+    </div>
+    <!-- 第二个 card -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Card 3-2</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
+        </div>
+    </div>
+</div>
+
+#}

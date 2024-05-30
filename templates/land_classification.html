@@ -1,0 +1,97 @@
+{% extends "recognition.html" %}
+{% block style_mode %}
+
+
+{% endblock %}
+{% block main_content %}
+<div class="row m-lg-2">
+    <div class="col-md-6">
+        <div class="card" style="width: 100%;">
+            <div class="col-xs-12 card-body ">
+                <img src="static/喜马拉雅山.jpg" class="card-img-top" style="width:610px;height:370px" id="rgbImage">
+                <div class="card-body text-center">
+                    <p class="card-text">可见光波段图像</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card" style="width: 100%">
+            <div class="col-xs-12 card-body h-100">
+                <img src="static/新西兰库克山.jpg" class="card-img-top" style="width:610px;height:370px" id="222">
+                <div class="card-body text-center">
+                    <p class="card-text">识别结果</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row m-lg-2">
+    <div class="card m-lg-2 mr-4">
+        <div class="row m-lg-2 mr-1">
+            <div class="col-md-3 mt-2">
+                <p class="card-text">请选择一幅可见光遥感影像：</p>
+                <div class="form-group" id="formGroup1">
+                    <input class="form-control form-control-sm mt-1 mb-3" type="file" id="imageInputRgb">
+                    <a href="#" class="btn btn-light" id="upload4">提交图像</a>
+                    <button class="btn btn-light mt-2 mb-2" id="startButtonRgb"> 开始运行 </button>
+                    <button class="btn btn-light mt-2 mb-2" id="pop-up" data-bs-toggle="modal" data-bs-target="#exampleModal" >地图显示</button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">将结果图像显示在地图上</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">  {# 弹窗内容 #}
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">图像坐标：</label>
+                                            <input type="text" class="form-control" id="InputLocation1" aria-describedby="emailHelp">
+                                            <div id="emailHelp" class="form-text">如果不输入坐标则使用默认坐标</div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+                                  <button type="button" class="btn btn-outline-primary" id="mapButton">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card mt-2">
+                  <div class="card-header" id="resulttext">
+                    分析结果：
+                  </div>
+                  <div class="panel" style="overflow:auto; max-height:360px;max-width:450px">
+                    <div class="card-text" id="cardText">
+
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+            <div class=" col-xs-12 col-md-5">
+                <div class="row-cols-2 mt-3">
+                    <h4>统计情况：</h4>
+                </div>
+                <div class="row-cols-2 mt-2">
+                    <div class="row-cols-2 mt-2" id="result_table_Rgb">
+                        <div class="echart" id="chart1" style="width: 500px;height:350px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endblock %}
+
+    {% block import_script %}
+    <script src="/static/js/land_classification.js"> </script>
+    <script src="/static/lib/echarts-5.5.0/dist/echarts.js"> </script>
+    {% endblock %}

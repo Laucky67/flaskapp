@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /*设置背景图片*/
+        body {
+            background: url(static/蓝色的冲浪1.png) no-repeat;
+            background-size:cover;font-size: 15px;
+        }
+         /*给表单的边框设置大小,颜色和不透明度*/
+        .card {
+            background-color: rgba(255, 255, 255, 0.5); /* 磨砂效果 */
+            border-radius: 15px; /* 圆角 */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-5 ">
+        <div class="row d-flex ">
+            <div class="col-md-4 offset-md-4 ">
+                <div class="card" id="">
+                    <div class="card-header text-center">
+                        <h5 class="card-title">登录系统</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">请使用账户密码登录进入平台</h6>
+                    </div>
+                    <div class="card-body">
+                        <form id="login-form" >
+                            <div class="form-group">
+                                <label for="username">用户名:</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">密码:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary" id="register">新用户注册</button>
+                                <button type="submit" class="btn btn-success" id="login">登   录</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入 Bootstrap JS 和依赖的 Popper.js 和 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        buttonLogin = document.getElementById("login")
+        buttonLogin.addEventListener("click", function(){
+
+        })
+        $('#login').on('click', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+            var data = {
+                username: username,
+                password: password
+            };
+
+            fetch('/logins/' + username, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Login updated') {
+                    alert('登录成功');
+                    // Redirect to another page or perform other actions
+                    window.location.href = '/index'; // 跳转到重定向URL
+                } else {
+                    alert('密码错误！请重试');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+        buttonRegister = document.getElementById("register")
+        buttonRegister.addEventListener("click", function(){
+            window.location.href = '/register';
+        })
+    </script>
+</body>
+</html>
+
+{#
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Login</title>
+
+    <!--用百度的静态资源库的cdn安装bootstrap环境-->
+
+    <!--font-awesome 核心我CSS 文件-->
+    <link href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 在bootstrap.min.js 之前引入 -->
+    <script src="/static/lib/jquery-371/jquery.min.js"></script>
+    {{ bootstrap.load_css() }}
+    {{ bootstrap.load_js() }}
+
+
+    <style>
+        /*设置背景图片*/
+        body {
+            background: url(static/首页背景.jpg) no-repeat;
+            background-size:cover;font-size: 15px;
+        }
+        /*给表单的边框设置大小,颜色和不透明度*/
+        .form {
+            background: rgba(255,255,255,0.9);
+            width:400px;margin:200px auto;
+        }
+        /*设置字体和大小*/
+        label {
+            font-family: Arial;font-size: 15px
+        }
+        /*当输入正确时,给输入框设置浅绿色*/
+        input.form-control:valid{
+            background-color: mintcream;
+        }
+        /*当输入正确时,给输入框设置浅红色*/
+        input.form-control:invalid{
+            background-color: #ffeeed;
+        }
+        /*设置图标为行内元素，并设置大小和颜色*/
+        .fa{
+            display: inline-block;
+            top: 27px;
+            left: 6px;
+            position: relative;
+            color: #575757;
+        }
+        /*为几个输入框设置padding,防止和图标重合*/
+        input[type="text"],input[type="password"],input[type="email"]{
+            padding-left:26px;
+        }
+        .form-title{
+            padding-top:20px;
+        }
+        #button{
+            padding-bottom: 50px;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="form row">
+        <form class="form-horizontal col-sm-offset-3 col-md-offset-3">
+            <h3 class="form-title">登录</h3>
+            <div class="col-sm-9 col-md-9">
+                <div class="form-group">
+                    <!--        用户名图标和用户名输入框            -->
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <input class="form-control" type="text" name="username" id="username" placeholder="请输入用户名" required autofocus>
+                </div>
+                    <!--        密码图标和密码输入框                -->
+                <div class="form-group">
+                    <i class="fa fa-key" aria-hidden="true"></i>
+                    <input class="form-control " type="password" name="password" id="password" placeholder="请输入密码" required>
+                </div>
+                    <!--        用超链接跳转到注册页面               -->
+                <div class="form-group">
+                    <br>
+                    <a href="{{ url_for('register') }}">没有账号？立即注册</a>
+                </div>
+                    <!--         登录按钮           -->
+                <div class="form-group">
+                    <input type="submit" value="登录" class="btn btn-success pull-right">
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+#}

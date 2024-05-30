@@ -1,0 +1,47 @@
+{% extends "recognition.html"%}
+{% block style_mode %}
+{% endblock %}
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+           <img id="clickable-image" src="/static/喜马拉雅山.jpg" alt="My Image" style="max-width: 100%; cursor:pointer;">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mt-2 mb-2 mx-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-light w-100 mb-2" id="coordinates-button">停止标记</button>
+                                <button class="btn btn-light w-100 mb-2" id="auto-button">自动分割</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-light w-100 mb-2 " id="send-int" data-value="1">正标记</button>
+                                <button class="btn btn-light w-100 mb-2" id="send-int" data-value="0">负标记</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mt-2 mb-2 mx-2">
+                    <div class="card-body">
+                        <div class="form-group" id="formGroup1">
+                            <input class="form-control form-control-sm mt-1 mb-3" type="file" id="imageInputRgb">
+                            <a href="#" class="btn btn-light" id="upload4">提交图像</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block import_script %}
+<script src="/static/js/label.js"> </script>
+<script src="/static/lib/echarts-5.5.0/dist/echarts.js"> </script>
+{# <script type="text/javascript" src="/static/lib/annotorious-2.7.13/annotorious.min.js"> </script> #}
+<script src="https://cdn.jsdelivr.net/npm/annotorious/dist/annotorious.min.js"></script>
+<script src="/static/lib/jquery-371/jquery.js"></script>
+{% endblock %}

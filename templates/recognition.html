@@ -1,0 +1,99 @@
+{% extends "header.html" %}
+{% block title %}地貌识别{% endblock %}
+{% block mystyle %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="/static/lib/echarts-5.5.0/dist/echarts.min.js"> </script>
+<script src="https://cdn.jsdelivr.net/npm/annotorious/dist/annotorious.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/annotorious/dist/annotorious.min.css">
+<script src="/static/lib/jquery-371/jquery.js"></script>
+{# <link rel="stylesheet" href="/static/lib/annotorious-2.7.13/annotorious.min.css"> #}
+
+<style>
+  .shadow {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-img-top1,
+  .card-img-top2,
+  .card-img-top3 {
+    width: 100%;
+    /* 你想要的宽度 */
+    height: 200px;
+    /* 你想要的高度 */
+    object-fit: cover;
+    /* 保持宽高比，超出部分裁剪 */
+  }
+
+    {% block style_mode %}
+
+    {% endblock %}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row ">
+    <div class="col-2 mr-2 m-lg-0">
+      <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sticky-bottom-0"
+        style="width: 280px; height: calc(100vh - 58px);" style="width: 280px;">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <img src="static/科技.png" class="bi me-2 " width="20" height="20" alt="科技图标">
+          <span class="fs-5">地貌智能解析</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/multimoding_page" class="nav-link link-dark" id="sidebarButton1">
+              多模态识别
+            </a>
+          </li>
+          <li>
+            <a href="/land_classification" class="nav-link link-dark" id="siderButton2">
+              土地分割
+            </a>
+          </li>
+          <li>
+            <a href="/analysis" class="nav-link link-dark" id="siderButton3" id="siderButton2">
+              综合分析
+            </a>
+          </li>
+          <li>
+            <a href="/label" class="nav-link link-dark" id="siderButton3" id="siderButton2">
+              智能标注
+            </a>
+          </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+            id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="static/设置.png" alt="" width="20" height="20" class="rounded-circle me-2">
+            <strong>设置</strong>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      {% block main_content %}
+
+
+      {% endblock %}
+    </div>
+  </div>
+</div>
+{% block import_script %}
+<script src="/static/js/recognition.js"></script>
+<script src="/static/lib/echarts-5.5.0/dist/echarts.js"> </script>
+<script src="/static/lib/jquery-371/jquery.js"></script>
+{% endblock %}
+
+
+{% endblock %}

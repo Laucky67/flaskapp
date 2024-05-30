@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  {# 块标题 #}
+
+  <title>
+    {% block title %}
+    Home
+    {% endblock %}
+  </title>
+  <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  {#块样式，使用bootstrap.load_css()加载bootstrap的css资源#}
+  {{ bootstrap.load_css() }}
+  {% block mystyle %}
+
+  {% endblock %}
+
+</head>
+
+<body>
+  {#块导航栏#}
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='hill.png') }}" alt="" width="30" height="30"
+          class="d-inline-block align-text-top">
+        {# <img src="favicon.ico" alt="Logo" width="30" height="24" class="d-inline-block align-text-top"> #}
+        微分地球
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item">
+            <a href="{{ url_for('index') }}" class="nav-link active" aria-current="page">主页</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('map') }}">地图</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('chat') }}">智能问答</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('recognition') }}">智能识别</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              更多
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+              <li><a class="dropdown-item" href="#">数据大屏</a></li>
+              <li><a class="dropdown-item" href="#">帮助文档</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="" aria-label="Search">
+          <button class="btn btn-light" type="submit">search</button>
+        </form>
+        <!-- 分界线 -->
+        <div class="vr m-lg-2"></div>
+
+        <div class="d-flex">
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+              id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="static/登录.png" alt="" width="18" height="20" class="rounded-circle me-2">
+              <strong>用户</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+              <li><a class="dropdown-item" href="#">设置</a></li>
+              <li><a class="dropdown-item" href="#">其他</a></li>
+              <li><a class="dropdown-item" href="#">资料</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">登出</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  {{ bootstrap.load_js() }}
+  {% block content %}
+
+  {% endblock %}
+
+</body>
+
+</html>

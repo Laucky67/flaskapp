@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Display</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #coordinates-button {
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <img id="clickable-image" src="data:image/jpeg;base64,{{ encoded_image }}" alt="My Image" style="max-width: 100%; cursor:pointer;">
+    <button id="coordinates-button">Stop Sending Coordinates</button>
+    <button class="send-int" data-value="1">Send 1</button>
+    <button class="send-int" data-value="0">Send 0</button>
+    <button id="auto-button">Auto</button>
+
+    <script>
+        let isSendingCoordinates = true; // 初始状态允许发送坐标
+
+        $(document).ready(function() {
+            // 获取图像元素
+            var imgElement = document.getElementById('clickable-image');
+
+            // 添加点击事件监听器
+            imgElement.addEventListener('click', function(event) {
+                if (isSendingCoordinates) {
+                    // 计算相对于图像的坐标
+                    var rect = imgElement.getBoundingClientRect();
+                    var x = event.clientX - rect.left;
+                    var y = event.clientY - rect.top;
+
+                    // 发送坐标到后端
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_pixel_coordinates',
+                        data: JSON.stringify({ point_x: x, point_y: y }),
+                        contentType: 'application/json',
+                        success: function(response) {
+                            console.log("Coordinates sent successfully.");
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error sending coordinates:", error);
+                        }
+                    });
+                }
+            }, false);
+
+            // 添加停止发送坐标按钮的点击事件监听器
+            $('#coordinates-button').on('click', function() {
+                isSendingCoordinates = false;
+                stopSendingCoordinates();
+            });
+
+            // 添加发送整数按钮的点击事件监听器
+            $('.send-int').on('click', function() {
+                var value = $(this).data('value');
+                sendIntValue(value);
+            });
+
+            // 添加自动按钮的点击事件监听器
+            $('#auto-button').on('click', function() {
+                sendAutoSignal();
+            });
+
+            function stopSendingCoordinates() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/finish_sending_points',
+                    success: function(response) {
+                        console.log("Finish signal sent successfully.");
+                        // 可选地，隐藏或禁用按钮，防止重复发送
+                        $('#coordinates-button').hide();
+                        // 显示按钮
+                        setTimeout(function() {
+                            $('#coordinates-button').show();
+                            isSendingCoordinates = true; // 设置为true，以便再次发送坐标
+                        }, 5000); // 5秒后显示按钮
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error sending finish signal:", error);
+                    }
+                });
+            }
+
+            function sendIntValue(value) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/send_int_value',
+                    data: JSON.stringify({ value: value }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log("Integer value sent successfully.");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error sending integer value:", error);
+                    }
+                });
+            }
+
+            function sendAutoSignal() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/auto_signal',
+                    success: function(response) {
+                        console.log("Auto signal sent successfully.");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error sending auto signal:", error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
